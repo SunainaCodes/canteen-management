@@ -1,0 +1,674 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cloud Canteen | Modern Modern Dining Experience</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600&family=Playfair+Display:ital,wght@0,700;1,700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body>
+    <nav class="glass-nav">
+        <!-- Announcements Ticker -->
+        <div class="announcement-ticker">
+            <div class="ticker-content">
+                <span><i data-lucide="megaphone"></i> Special Masala Chai now at 20% off!</span>
+                <span><i data-lucide="info"></i> Canteen open till 9:00 PM today</span>
+                <span><i data-lucide="sparkles"></i> Try our new Chocolate Lava cake!</span>
+            </div>
+        </div>
+        <div class="nav-container">
+            <div class="logo">
+                <i data-lucide="cloud"></i>
+                <span>Cloud Canteen</span>
+            </div>
+            <ul class="nav-links">
+                <li><a href="#hero">Home</a></li>
+                <li><a href="#menu">Daily Menu</a></li>
+                <li><a href="#features">Features</a></li>
+                <li><a href="#" id="adminToggle" style="color: var(--accent); font-weight: bold; display: none;">Admin Panel</a></li>
+                <li><a href="#" id="openLoginBtn">Sign In</a></li>
+                <li><a href="#" id="openRegisterBtn">Register</a></li>
+            </ul>
+            <div class="nav-actions">
+                <!-- Socket.io connection status indicator badge -->
+                <div class="socket-status" id="socketStatusBadge" style="display: flex; align-items: center; gap: 6px; font-size: 0.75rem; background: rgba(255,255,255,0.05); padding: 6px 12px; border-radius: 20px; border: 1px solid var(--glass-border); color: #ff9800; cursor: pointer; transition: all 0.3s ease;" title="Socket.io Real-time Status">
+                    <span style="display: inline-block; width: 8px; height: 8px; border-radius: 50%; background-color: #ff9800;" id="socketStatusDot"></span>
+                    <span id="socketStatusText">Offline</span>
+                </div>
+                <div class="cart-icon-container" id="cartOpenBtn">
+                    <i data-lucide="shopping-cart"></i>
+                    <span class="cart-badge" id="cartBadge">0</span>
+                </div>
+                <div id="userProfile" class="user-profile" style="display:none">
+                    <i data-lucide="user"></i>
+                    <span id="userNameDisplay">User</span>
+                    <button class="logout-btn" id="logoutBtn">Logout</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <header id="hero" class="hero-section">
+        <div class="hero-content">
+            <h1 class="fade-in">Cloud <span class="accent">Canteen</span></h1>
+            <p class="tagline fade-in-delayed">Premium canteen experience at your fingertips. Healthy, Fast, Relatable.</p>
+            <div class="hero-actions fade-in-delayed">
+                <button class="cta-button" onclick="document.getElementById('menu').scrollIntoView({ behavior: 'smooth' })">
+                    Explore Menu <i data-lucide="arrow-right"></i>
+                </button>
+                <button class="secondary-button" onclick="document.getElementById('about').scrollIntoView({ behavior: 'smooth' })">
+                    Learn More
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <section id="about" class="features">
+        <div class="section-header">
+            <h2>The Future of Canteens</h2>
+            <p>We've combined taste with technology.</p>
+        </div>
+        <div class="feature-grid">
+            <div class="feature-card">
+                <i data-lucide="zap"></i>
+                <h3>Real-time Tracking</h3>
+                <p>Know exactly when your meal is ready.</p>
+            </div>
+            <div class="feature-card">
+                <i data-lucide="leaf"></i>
+                <h3>Pure Ingredients</h3>
+                <p>Locally sourced, organic, and always fresh.</p>
+            </div>
+            <div class="feature-card">
+                <i data-lucide="wallet"></i>
+                <h3>Cashless Payments</h3>
+                <p>Order with UPI, Cards, or Meal Credits.</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="menu" class="menu-preview">
+        <div class="section-header">
+            <h2>Today's Culinary Journey</h2>
+            <p>Carefully crafted for your palate.</p>
+        </div>
+        
+        <!-- Menu Tabs -->
+        <div class="menu-tabs">
+            <button class="menu-tab active" data-category="main">Main Course</button>
+            <button class="menu-tab" data-category="beverages">Beverages</button>
+            <button class="menu-tab" data-category="icecream">Ice Cream</button>
+        </div>
+
+        <!-- Main Course Grid -->
+        <div class="menu-category-grid active" id="main">
+            <!-- Noodles -->
+            <div class="menu-item-card" style="--bg-url: url('assets/noodles.png')">
+                <div class="menu-overlay">
+                    <div class="menu-tags">
+                        <span class="tag stock-low">Only 5 left!</span>
+                        <span class="tag info">420 kcal</span>
+                    </div>
+                    <h3>Spicy Hakka Noodles</h3>
+                    <p>₹120</p>
+                    <button class="add-to-cart-btn" onclick="addToCart('Spicy Hakka Noodles', 120)">Add to Cart</button>
+                </div>
+            </div>
+            <!-- Dosa -->
+            <div class="menu-item-card" style="--bg-url: url('assets/dosa.png')">
+                <div class="menu-overlay">
+                    <div class="menu-tags">
+                        <span class="tag healthy">Must Try</span>
+                        <span class="tag info">280 kcal</span>
+                    </div>
+                    <h3>Masala Dosa</h3>
+                    <p>₹80</p>
+                    <button class="add-to-cart-btn" onclick="addToCart('Masala Dosa', 80)">Add to Cart</button>
+                </div>
+            </div>
+            <!-- Rice -->
+            <div class="menu-item-card" style="--bg-url: url('https://images.unsplash.com/photo-1512058564366-18510be2db19?auto=format&fit=crop&q=80&w=600')">
+                <div class="menu-overlay">
+                    <div class="menu-tags">
+                        <span class="tag info">380 kcal</span>
+                    </div>
+                    <h3>Vegetable Fried Rice</h3>
+                    <p>₹110</p>
+                    <button class="add-to-cart-btn" onclick="addToCart('Vegetable Fried Rice', 110)">Add to Cart</button>
+                </div>
+            </div>
+            <!-- Manchurian -->
+            <div class="menu-item-card" style="--bg-url: url('assets/manchurian.png')">
+                <div class="menu-overlay">
+                    <div class="menu-tags">
+                        <span class="tag info">310 kcal</span>
+                    </div>
+                    <h3>Gobi Manchurian</h3>
+                    <p>₹130</p>
+                    <button class="add-to-cart-btn" onclick="addToCart('Gobi Manchurian', 130)">Add to Cart</button>
+                </div>
+            </div>
+            <!-- Samosa -->
+            <div class="menu-item-card" style="--bg-url: url('assets/samosa.png')">
+                <div class="menu-overlay">
+                    <div class="menu-tags">
+                        <span class="tag info">190 kcal</span>
+                    </div>
+                    <h3>Crispy Samosa (2pcs)</h3>
+                    <p>₹30</p>
+                    <button class="add-to-cart-btn" onclick="addToCart('Crispy Samosa', 30)">Add to Cart</button>
+                </div>
+            </div>
+            <!-- Burger -->
+            <div class="menu-item-card" style="--bg-url: url('https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&q=80&w=600')">
+                <div class="menu-overlay">
+                    <div class="menu-tags">
+                        <span class="tag stock-low">Only 3 left!</span>
+                        <span class="tag info">450 kcal</span>
+                    </div>
+                    <h3>Classic Veg Burger</h3>
+                    <p>₹90</p>
+                    <button class="add-to-cart-btn" onclick="addToCart('Classic Veg Burger', 90)">Add to Cart</button>
+                </div>
+            </div>
+            <!-- Sandwich -->
+            <div class="menu-item-card" style="--bg-url: url('https://images.unsplash.com/photo-1528735602780-2552fd46c7af?auto=format&fit=crop&q=80&w=600')">
+                <div class="menu-overlay">
+                    <div class="menu-tags">
+                        <span class="tag healthy">Healthy</span>
+                        <span class="tag info">320 kcal</span>
+                    </div>
+                    <h3>Club Sandwich</h3>
+                    <p>₹100</p>
+                    <button class="add-to-cart-btn" onclick="addToCart('Club Sandwich', 100)">Add to Cart</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Beverages Grid -->
+        <div class="menu-category-grid" id="beverages">
+            <!-- Tea -->
+            <div class="menu-item-card" style="--bg-url: url('assets/chai.png')">
+                <div class="menu-overlay">
+                    <div class="menu-tags">
+                        <span class="tag info">45 kcal</span>
+                    </div>
+                    <h3>Masala Cutting Chai</h3>
+                    <p>₹15</p>
+                    <button class="add-to-cart-btn" onclick="addToCart('Masala Cutting Chai', 15)">Add to Cart</button>
+                </div>
+            </div>
+            <!-- Cold Coffee -->
+            <div class="menu-item-card" style="--bg-url: url('https://images.unsplash.com/photo-1517701604599-bb29b565090c?auto=format&fit=crop&q=80&w=600')">
+                <div class="menu-overlay">
+                    <div class="menu-tags">
+                        <span class="tag info">180 kcal</span>
+                    </div>
+                    <h3>Cold Coffee</h3>
+                    <p>₹60</p>
+                    <button class="add-to-cart-btn" onclick="addToCart('Cold Coffee', 60)">Add to Cart</button>
+                </div>
+            </div>
+            <!-- Lime Soda -->
+            <div class="menu-item-card" style="--bg-url: url('https://images.unsplash.com/photo-1513558161293-cdaf765ed2fd?auto=format&fit=crop&q=80&w=600')">
+                <div class="menu-overlay">
+                    <div class="menu-tags">
+                        <span class="tag info">60 kcal</span>
+                    </div>
+                    <h3>Fresh Lime Soda</h3>
+                    <p>₹40</p>
+                    <button class="add-to-cart-btn" onclick="addToCart('Fresh Lime Soda', 40)">Add to Cart</button>
+                </div>
+            </div>
+            <!-- Hot Chocolate -->
+            <div class="menu-item-card" style="--bg-url: url('https://images.unsplash.com/photo-1544787210-22dbdc67b9c8?auto=format&fit=crop&q=80&w=600')">
+                <div class="menu-overlay">
+                    <div class="menu-tags">
+                        <span class="tag info">210 kcal</span>
+                    </div>
+                    <h3>Hot Chocolate</h3>
+                    <p>₹70</p>
+                    <button class="add-to-cart-btn" onclick="addToCart('Hot Chocolate', 70)">Add to Cart</button>
+                </div>
+            </div>
+            <!-- Brewed Hot Coffee -->
+            <div class="menu-item-card" style="--bg-url: url('https://images.unsplash.com/photo-1511920170033-f8396924c348?auto=format&fit=crop&q=80&w=600')">
+                <div class="menu-overlay">
+                    <div class="menu-tags">
+                        <span class="tag info">30 kcal</span>
+                    </div>
+                    <h3>Brewed Hot Coffee</h3>
+                    <p>₹40</p>
+                    <button class="add-to-cart-btn" onclick="addToCart('Brewed Hot Coffee', 40)">Add to Cart</button>
+                </div>
+            </div>
+            <!-- Lemonade -->
+            <div class="menu-item-card" style="--bg-url: url('https://images.unsplash.com/photo-1513558161293-cdaf765ed2fd?auto=format&fit=crop&q=80&w=600')">
+                <div class="menu-overlay">
+                    <div class="menu-tags">
+                        <span class="tag info">55 kcal</span>
+                    </div>
+                    <h3>Minty Lemonade</h3>
+                    <p>₹30</p>
+                    <button class="add-to-cart-btn" onclick="addToCart('Minty Lemonade', 30)">Add to Cart</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Ice Cream Grid -->
+        <div class="menu-category-grid" id="icecream">
+            <!-- Strawberry -->
+            <div class="menu-item-card" style="--bg-url: url('https://images.unsplash.com/photo-1497034825429-c343d7c6a68f?auto=format&fit=crop&q=80&w=600')">
+                <div class="menu-overlay">
+                    <div class="menu-tags">
+                        <span class="tag info">140 kcal</span>
+                    </div>
+                    <h3>Sweet Strawberry</h3>
+                    <p>₹60</p>
+                    <button class="add-to-cart-btn" onclick="addToCart('Sweet Strawberry', 60)">Add to Cart</button>
+                </div>
+            </div>
+            <!-- Mango -->
+            <div class="menu-item-card" style="--bg-url: url('assets/mango.png')">
+                <div class="menu-overlay">
+                    <div class="menu-tags">
+                        <span class="tag healthy">Pure</span>
+                        <span class="tag info">150 kcal</span>
+                    </div>
+                    <h3>Tropical Mango</h3>
+                    <p>₹60</p>
+                    <button class="add-to-cart-btn" onclick="addToCart('Tropical Mango', 60)">Add to Cart</button>
+                </div>
+            </div>
+            <!-- Butterscotch -->
+            <div class="menu-item-card" style="--bg-url: url('assets/butterscotch.png')">
+                <div class="menu-overlay">
+                    <div class="menu-tags">
+                        <span class="tag info">230 kcal</span>
+                    </div>
+                    <h3>Crunchy Butterscotch</h3>
+                    <p>₹70</p>
+                    <button class="add-to-cart-btn" onclick="addToCart('Crunchy Butterscotch', 70)">Add to Cart</button>
+                </div>
+            </div>
+            <!-- Mixed Fruit -->
+            <div class="menu-item-card" style="--bg-url: url('https://images.unsplash.com/photo-1563805042-7684c019e1cb?auto=format&fit=crop&q=80&w=600')">
+                <div class="menu-overlay">
+                    <div class="menu-tags">
+                        <span class="tag healthy">Light</span>
+                        <span class="tag info">120 kcal</span>
+                    </div>
+                    <h3>Mixed Fruit Delight</h3>
+                    <p>₹80</p>
+                    <button class="add-to-cart-btn" onclick="addToCart('Mixed Fruit Delight', 80)">Add to Cart</button>
+                </div>
+            </div>
+            <!-- Choco Lava -->
+            <div class="menu-item-card" style="--bg-url: url('https://images.unsplash.com/photo-1563805042-7684c019e1cb?auto=format&fit=crop&q=80&w=600')">
+                <div class="menu-overlay">
+                    <div class="menu-tags">
+                        <span class="tag stock-low">Bestseller</span>
+                        <span class="tag info">350 kcal</span>
+                    </div>
+                    <h3>Chocolate Lava</h3>
+                    <p>₹120</p>
+                    <button class="add-to-cart-btn" onclick="addToCart('Chocolate Lava', 120)">Add to Cart</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer id="contact">
+        <div class="footer-content">
+            <div class="footer-brand">
+                <h2>Cloud Canteen</h2>
+                <p>Transforming institutional dining into a premium experience.</p>
+            </div>
+            <ul class="footer-links">
+                <li><a href="#" id="linkPrivacy">Privacy Policy</a></li>
+                <li><a href="#" id="linkTerms">Terms of Service</a></li>
+            </ul>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 Cloud Canteen. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Cart Drawer -->
+    <div class="cart-drawer" id="cartDrawer">
+        <div class="cart-header">
+            <h3>Your Selection</h3>
+            <button class="close-cart" id="cartCloseBtn">&times;</button>
+        </div>
+        <div class="cart-items" id="cartItemsList">
+            <!-- Items will be injected here -->
+        </div>
+        
+        <!-- AI Recommendations -->
+        <div class="ai-recommendations">
+            <p><i data-lucide="sparkles"></i> AI Suggestion: <strong>Mixed Fruit Delight</strong></p>
+            <button class="add-to-cart-btn mini" onclick="addToCart('Mixed Fruit Delight', 80)">Add for ₹80</button>
+        </div>
+
+        <div class="cart-footer">
+            <div class="total-row">
+                <span>Total Amount:</span>
+                <span id="cartTotal">₹0</span>
+            </div>
+            <button class="checkout-btn" id="checkoutBtn">Proceed to Payment</button>
+        </div>
+    </div>
+
+    <!-- Payment Modal -->
+    <div class="payment-modal" id="paymentModal">
+        <div class="payment-form-container">
+            <div class="payment-header" style="background: #111a2d; padding: 1.5rem; margin: -3rem -3rem 2rem -3rem; border-top-left-radius: 32px; border-top-right-radius: 32px; border-bottom: 1px solid rgba(255,255,255,0.1); display: flex; align-items: center; justify-content: space-between;">
+                <div style="display: flex; align-items: center; gap: 15px;">
+                    <button class="close-modal" id="paymentBackBtn" style="position: static; background: transparent; border: none; color: white; cursor: pointer; display: flex; align-items: center; gap: 5px;">
+                        <i data-lucide="arrow-left" style="width: 18px; height: 18px;"></i>
+                    </button>
+                    <div style="text-align: left;">
+                        <img src="https://razorpay.com/assets/razorpay-glyph.svg" alt="Razorpay" style="height: 25px;">
+                        <h3 style="font-size: 0.8rem; margin-top: 2px; opacity: 0.7;">Cloud Canteen</h3>
+                    </div>
+                </div>
+                <div style="text-align: right;">
+                    <p style="font-size: 0.7rem; color: var(--text-muted);">Amount to Pay</p>
+                    <h2 id="paymentAmount" style="font-size: 1.5rem; color: #3395ff;">₹0</h2>
+                </div>
+                <button class="close-modal" id="paymentCloseBtn" style="position: static; font-size: 1.2rem;">&times;</button>
+            </div>
+            
+            <div class="payment-tabs">
+                <button class="payment-tab active" data-pay="upi">UPI / QR</button>
+                <button class="payment-tab" data-pay="card">Card</button>
+                <button class="payment-tab" data-pay="net">Net Banking</button>
+            </div>
+
+            <!-- QR Section -->
+            <div class="pay-section active" id="upiSection">
+                <div class="qr-container" style="display: flex; flex-direction: column; align-items: center; background: white; padding: 2rem; border-radius: 12px; margin-bottom: 1rem;">
+                    <div style="color: #111a2d; font-weight: 600; margin-bottom: 1rem; font-size: 0.9rem;">Scan the QR code to pay</div>
+                    <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=suninadiwan005@oksbi" alt="Razorpay QR" style="width: 180px; height: 180px;">
+                    <div style="margin-top: 1rem; display: flex; align-items: center; gap: 8px;">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/e/e1/UPI-Logo.png" alt="UPI" style="height: 12px;">
+                        <span style="color: #666; font-size: 0.7rem;">Powered by Razorpay</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card Section -->
+            <div class="pay-section" id="cardSection">
+                <div class="input-group">
+                    <label>Card Number</label>
+                    <input type="text" placeholder="XXXX XXXX XXXX XXXX">
+                </div>
+                <div style="display: flex; gap: 1rem;">
+                    <div class="input-group" style="flex: 2">
+                        <label>Expiry Date</label>
+                        <input type="text" placeholder="MM/YY">
+                    </div>
+                    <div class="input-group" style="flex: 1">
+                        <label>CVV</label>
+                        <input type="password" placeholder="***">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Net Banking Section -->
+            <div class="pay-section" id="netSection">
+                <div class="input-group">
+                    <label>Select Bank</label>
+                    <select class="bank-select">
+                        <option>State Bank of India</option>
+                        <option>HDFC Bank</option>
+                        <option>ICICI Bank</option>
+                        <option>Axis Bank</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="payment-footer" style="text-align: center;">
+                <button class="cta-button" id="payNowBtn" style="width: 100%; background: #3395ff; border-radius: 8px;">Pay via Razorpay</button>
+                <div style="margin-top: 1.5rem; display: flex; justify-content: center; align-items: center; gap: 15px; opacity: 0.5;">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/b/b5/PayPal.svg" alt="Security" style="height: 12px; filter: grayscale(1);">
+                    <span style="font-size: 0.6rem;">PCI DSS Compliant</span>
+                    <span style="font-size: 0.6rem;">256-bit Encryption</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Success Celebration & Bill -->
+    <div class="payment-success-overlay" id="successOverlay">
+        <div class="success-card">
+            <button class="close-modal" onclick="closeSuccess()" style="top: 30px; right: 30px;">&times;</button>
+            <div class="success-header">
+                <i data-lucide="check-circle" class="success-icon"></i>
+                <h2>Order Successful!</h2>
+                <p>Order ID: <span id="billOrderId">#CC-0000</span></p>
+            </div>
+
+            <!-- Meal Status Tracker -->
+            <div class="meal-tracker">
+                <div class="tracker-step active" id="step1">
+                    <div class="step-icon"><i data-lucide="check"></i></div>
+                    <div class="step-info">
+                        <h4>Order Confirmed</h4>
+                        <p>We've received your order</p>
+                    </div>
+                </div>
+                <div class="tracker-step" id="step2">
+                    <div class="step-icon"><i data-lucide="chef-hat"></i></div>
+                    <div class="step-info">
+                        <h4>In the Kitchen</h4>
+                        <p>Chef is preparing your meal</p>
+                    </div>
+                </div>
+                <div class="tracker-step" id="step3">
+                    <div class="step-icon"><i data-lucide="package"></i></div>
+                    <div class="step-info">
+                        <h4>Ready for Pickup</h4>
+                        <p>Collect your meal at Counter 1</p>
+                    </div>
+                </div>
+                <div class="tracker-line">
+                    <div class="tracker-progress" id="trackerProgress"></div>
+                </div>
+            </div>
+            
+            <div class="bill-container" id="orderBill">
+                <div class="bill-header">
+                    <h3>CLOUD CANTEEN</h3>
+                    <p>Digital Receipt</p>
+                </div>
+                <div class="bill-divider"></div>
+                <div class="bill-details">
+                    <p>Order ID: <span id="billOrderId">#CC-2026-001</span></p>
+                    <p>Date: <span id="billDate">--/--/----</span></p>
+                </div>
+                <div class="bill-divider"></div>
+                <div class="bill-items" id="billItems">
+                    <!-- Bill items injected here -->
+                </div>
+                <div class="bill-divider"></div>
+                <div class="bill-total">
+                    <span>GRAND TOTAL</span>
+                    <span id="billGrandTotal">₹0</span>
+                </div>
+                <div class="bill-footer">
+                    <p>Thank you for dining with us!</p>
+                </div>
+            </div>
+
+            <!-- Feedback & Rating System -->
+            <div id="feedbackSection" style="display: none; margin-top: 2rem; padding-top: 2rem; border-top: 1px solid var(--glass-border); animation: fadeIn 0.5s;">
+                <h3 style="margin-bottom: 0.5rem;">How was your experience?</h3>
+                <p style="font-size: 0.8rem; opacity: 0.7; margin-bottom: 1rem;">Rate your meal to help us improve.</p>
+                <div class="rating-stars" style="display: flex; justify-content: center; gap: 10px; margin-bottom: 1.5rem;">
+                    <i data-lucide="star" class="star" onclick="setRating(1)"></i>
+                    <i data-lucide="star" class="star" onclick="setRating(2)"></i>
+                    <i data-lucide="star" class="star" onclick="setRating(3)"></i>
+                    <i data-lucide="star" class="star" onclick="setRating(4)"></i>
+                    <i data-lucide="star" class="star" onclick="setRating(5)"></i>
+                </div>
+                <textarea id="feedbackText" placeholder="Any comments? (Optional)" style="width: 100%; background: rgba(255,255,255,0.05); border: 1px solid var(--glass-border); border-radius: 12px; padding: 1rem; color: white; margin-bottom: 1rem; resize: none;"></textarea>
+                <button class="cta-button mini" onclick="submitFeedback()" style="width: 100%;">Submit Feedback</button>
+            </div>
+
+            <div class="success-actions">
+                <button class="cta-button mini" onclick="window.print()">Print Bill</button>
+                <button class="cta-button mini secondary-btn" onclick="downloadBill()">Download Bill</button>
+                <button class="cta-button mini" onclick="goHome()">Home</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="cart-overlay" id="cartOverlay"></div>
+
+    <!-- Authentication Modal -->
+    <div class="auth-modal" id="authModal">
+        <div class="form-container" id="authContainer">
+            <button class="close-modal" id="authCloseBtn">&times;</button>
+            
+            <!-- Login Form -->
+            <div id="loginSection">
+                <div class="form-header">
+                    <h2>Welcome Back</h2>
+                    <p>Sign in to your account</p>
+                </div>
+                <form id="loginForm">
+                    <div class="input-group">
+                        <label for="identifier">Email or Mobile Number</label>
+                        <input type="text" id="identifier" placeholder="Email or 10-digit Mobile" required>
+                    </div>
+                    <div class="input-group">
+                        <label for="password">Password</label>
+                        <input type="password" id="password" placeholder="••••••••" required>
+                    </div>
+                    <button type="submit" class="cta-button auth-button" style="width:100%">Sign In</button>
+                </form>
+                <div class="form-footer">
+                    <p>Don't have an account? <a href="#" id="toRegister">Create Account</a></p>
+                </div>
+            </div>
+
+            <!-- Register Form (Hidden by default) -->
+            <div id="registerSection" style="display: none;">
+                <div class="form-header">
+                    <h2>Create Account</h2>
+                    <p>Join the future of dining</p>
+                </div>
+                <form id="registerForm">
+                    <div class="input-group">
+                        <label for="reg_email">Email Address</label>
+                        <input type="email" id="reg_email" placeholder="name@example.com" required>
+                    </div>
+                    <div class="input-group">
+                        <label for="reg_mobile">Mobile Number</label>
+                        <input type="tel" id="reg_mobile" placeholder="+91 XXXXX XXXXX" required>
+                    </div>
+                    <div class="input-group">
+                        <label for="reg_password">Password</label>
+                        <input type="password" id="reg_password" placeholder="••••••••" required>
+                    </div>
+                    <button type="submit" class="cta-button auth-button" style="width:100%">Register Now</button>
+                </form>
+                <div class="form-footer">
+                    <p>Already have an account? <a href="#" id="toLogin">Sign In</a></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Admin Kitchen Dashboard -->
+    <div class="auth-modal" id="adminModal">
+        <div class="form-container" style="max-width: 900px; max-height: 85vh;">
+            <div class="payment-header" style="background: #1a1e26; margin: -3rem -3rem 2rem -3rem; border-radius: 32px 32px 0 0;">
+                <h2 style="color: var(--accent);"><i data-lucide="chef-hat"></i> Kitchen Dashboard</h2>
+                <button class="close-modal" id="adminCloseBtn">&times;</button>
+            </div>
+            
+            <div class="admin-stats" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin-bottom: 2rem;">
+                <div class="stat-card" style="background: rgba(255,255,255,0.05); padding: 1rem; border-radius: 12px; text-align: center;">
+                    <p style="font-size: 0.7rem; opacity: 0.7;">PENDING</p>
+                    <h3 id="statPending">0</h3>
+                </div>
+                <div class="stat-card" style="background: rgba(255,255,255,0.05); padding: 1rem; border-radius: 12px; text-align: center;">
+                    <p style="font-size: 0.7rem; opacity: 0.7;">READY</p>
+                    <h3 id="statReady">0</h3>
+                </div>
+                <div class="stat-card" style="background: rgba(255,255,255,0.05); padding: 1rem; border-radius: 12px; text-align: center;">
+                    <p style="font-size: 0.7rem; opacity: 0.7;">AVG RATING</p>
+                    <h3 id="statRating">4.8 ★</h3>
+                </div>
+            </div>
+
+            <div class="order-list-header" style="display: grid; grid-template-columns: 1fr 2fr 1fr 1.5fr; padding: 1rem; border-bottom: 1px solid var(--glass-border); font-weight: bold; font-size: 0.8rem; opacity: 0.7;">
+                <span>ORDER ID</span>
+                <span>ITEMS</span>
+                <span>TOTAL</span>
+                <span>ACTION</span>
+            </div>
+            <div id="adminOrderList" style="max-height: 400px; overflow-y: auto; padding: 1rem 0;">
+                <!-- Orders will be injected here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Admin Kitchen Dashboard -->
+    <div class="auth-modal" id="adminModal">
+        <div class="form-container" style="max-width: 900px; max-height: 85vh;">
+            <div class="payment-header" style="background: #1a1e26; margin: -3rem -3rem 2rem -3rem; border-radius: 32px 32px 0 0;">
+                <h2 style="color: var(--accent);"><i data-lucide="chef-hat"></i> Kitchen Dashboard</h2>
+                <button class="close-modal" id="adminCloseBtn">&times;</button>
+            </div>
+            
+            <div class="admin-stats" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin-bottom: 2rem;">
+                <div class="stat-card" style="background: rgba(255,255,255,0.05); padding: 1rem; border-radius: 12px; text-align: center;">
+                    <p style="font-size: 0.7rem; opacity: 0.7;">PENDING</p>
+                    <h3 id="statPending">0</h3>
+                </div>
+                <div class="stat-card" style="background: rgba(255,255,255,0.05); padding: 1rem; border-radius: 12px; text-align: center;">
+                    <p style="font-size: 0.7rem; opacity: 0.7;">READY</p>
+                    <h3 id="statReady">0</h3>
+                </div>
+                <div class="stat-card" style="background: rgba(255,255,255,0.05); padding: 1rem; border-radius: 12px; text-align: center;">
+                    <p style="font-size: 0.7rem; opacity: 0.7;">AVG RATING</p>
+                    <h3 id="statRating">4.8 ★</h3>
+                </div>
+            </div>
+
+            <div class="order-list-header" style="display: grid; grid-template-columns: 1fr 2fr 1fr 1.5fr; padding: 1rem; border-bottom: 1px solid var(--glass-border); font-weight: bold; font-size: 0.8rem; opacity: 0.7;">
+                <span>ORDER ID</span>
+                <span>ITEMS</span>
+                <span>TOTAL</span>
+                <span>ACTION</span>
+            </div>
+            <div id="adminOrderList" style="max-height: 400px; overflow-y: auto; padding: 1rem 0;">
+                <!-- Orders will be injected here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Policy/Information Modal -->
+    <div class="auth-modal" id="policyModal">
+        <div class="form-container" style="max-width: 700px; max-height: 80vh; overflow-y: auto;">
+            <button class="close-modal" id="policyCloseBtn">&times;</button>
+            <div id="policyContent">
+                <!-- Dynamic Content Injected Here -->
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script>
+    <script src="script.js"></script>
+    <script>
+        lucide.createIcons();
+    </script>
+</body>
+</html>
